@@ -1,3 +1,4 @@
+@Library('my-infra-lib') _
 pipeline {
     agent {
         label 'Dev'
@@ -22,8 +23,7 @@ pipeline {
                 expression { params.Packer_Build == 'yes' }
             }
             steps {
-                sh 'packer plugins install github.com/hashicorp/amazon'
-                sh 'packer validate --var-file packer-vars.json packer.json'
+                packerbuild()
             }
         }
         stage ('Terraform_Plan'){
