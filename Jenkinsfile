@@ -43,12 +43,7 @@ pipeline {
                 expression { params.Terraform_Plan == 'yes' }
             }
             steps{
-                sh '''
-                terraform init
-                terraform fmt
-                terraform validate
-                terraform plan
-                '''
+                terraformplan()
             }
         }
         stage ('Create Infra'){
@@ -68,6 +63,11 @@ pipeline {
                 terraform init
                 terraform destroy --auto-approve
                 '''
+            }
+        }
+        stage('Ansible Setup'){
+            steps {
+                sh 'ansible -i invfile all -m ping'
             }
         }
     }
