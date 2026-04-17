@@ -9,6 +9,7 @@ pipeline {
         choice(name: 'Terraform_Plan', choices: ['no', 'yes'], description: 'Select an option')
         choice(name: 'Terraform_Apply', choices: ['no', 'yes'], description: 'Select an option')
         choice(name: 'Terraform_Destroy', choices: ['no', 'yes'], description: 'Select an option')
+        choice(name: 'Ansible_Setup', choices: ['no', 'yes'], description: 'Select an option')
         choice(name: 'Pull_AMI', choices: ['no', 'yes'], description: 'Select an option')
     }
     stages {
@@ -66,8 +67,11 @@ pipeline {
             }
         }
         stage('Ansible Setup'){
+             when{
+               expression { params.Ansible_Setup == 'yes' } 
+            }
             steps {
-                sh 'ansible -i invfile all -m ping'
+                sh 'ansible-playbook -i invfile site.yaml'
             }
         }
     }

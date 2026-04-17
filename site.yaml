@@ -1,0 +1,24 @@
+- name: common setup
+  hosts: all
+  become: yes
+  roles:
+    - common
+    - kube_packages
+
+- name: initialize master
+  hosts: Kuberentes_Master
+  become: yes
+  roles:
+    - master_init
+
+- name: join workers
+  hosts: Kubernetes_Workers
+  become: yes
+  roles:
+    - worker_join
+
+- name: install network plugin
+  hosts: Kuberentes_Master
+  become: yes
+  roles:
+    - network_plugin
